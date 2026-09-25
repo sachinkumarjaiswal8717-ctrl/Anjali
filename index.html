@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday Anjali ✨</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffd1dc 0%, #ffe3e3 50%, #f7d6e0 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      color: #552a42;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      min-height: 94vh;
+      margin: 12px;
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      box-shadow: 0 16px 40px rgba(220, 120, 160, 0.25);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    /* Music Toggle Button */
+    .music-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(255, 182, 193, 0.6);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 100;
+      transition: transform 0.2s;
+    }
+
+    .music-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* Screen Transition */
+    .screen {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(14px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Buttons */
+    .btn {
+      background: linear-gradient(135deg, #ff4d88 0%, #ff758c 100%);
+      color: #fff;
+      border: none;
+      padding: 13px 30px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 77, 136, 0.35);
+      transition: all 0.25s ease;
+      margin-top: 20px;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 4px 10px rgba(255, 77, 136, 0.2);
+    }
+
+    /* Floating Hearts */
+    .heart-bg {
+      position: absolute;
+      color: rgba(255, 105, 180, 0.25);
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+      20% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
+    }
+
+    .title-large {
+      font-size: 24px;
+      font-weight: 700;
+      color: #c42b6a;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #8c5372;
+      margin-bottom: 18px;
+    }
+
+    .cute-illustration {
+      font-size: 80px;
+      animation: bounce 2s infinite ease-in-out;
+      margin: 10px 0;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Polaroid Photo Frame */
+    .polaroid-frame {
+      background: #ffffff;
+      padding: 14px 14px 20px 14px;
+      border-radius: 18px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(255, 192, 203, 0.4);
+      margin: 15px 0;
+      transform: rotate(-1.5deg);
+      transition: transform 0.3s ease;
+      max-width: 270px;
+      width: 100%;
+    }
+
+    .polaroid-frame:hover {
+      transform: rotate(0deg) scale(1.02);
+    }
+
+    .polaroid-frame img {
+      width: 100%;
+      height: 270px;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      background-color: #ffe6ee;
+    }
+
+    .polaroid-caption {
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #b52b65;
+    }
+
+    /* Balloon Screen */
+    .balloon-area {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin: 20px 0;
+      min-height: 160px;
+      align-items: center;
+    }
+
+    .balloon {
+      width: 65px;
+      height: 80px;
+      border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 20px;
+      position: relative;
+      box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1), 0 8px 15px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      animation: balloonFloat 3s ease-in-out infinite alternate;
+    }
+
+    .balloon::after {
+      content: "▲";
+      position: absolute;
+      bottom: -6px;
+      font-size: 8px;
+      color: inherit;
+    }
+
+    @keyframes balloonFloat {
+      0% { transform: translateY(0px) rotate(-3deg); }
+      100% { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    .balloon-b1 { background: #ff6b81; color: #ff6b81; }
+    .balloon-b2 { background: #a29bfe; color: #a29bfe; }
+    .balloon-b3 { background: #fd79a8; color: #fd79a8; }
+    .balloon-b4 { background: #74b9ff; color: #74b9ff; }
+
+    .popped {
+      animation: popAnim 0.3s forwards ease-out !important;
+      pointer-events: none;
+    }
+
+    @keyframes popAnim {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.5; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    .revealed-text {
+      font-size: 22px;
+      color: #b52b65;
+      font-weight: 700;
+      min-height: 38px;
+      margin-top: 8px;
+    }
+
+    /* Cake & Candle Screen */
+    .cake-container {
+      position: relative;
+      cursor: pointer;
+      margin: 20px 0;
+      padding: 10px;
+    }
+
+    .cake-icon {
+      font-size: 100px;
+      display: inline-block;
+    }
+
+    .flame {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 26px;
+      animation: flameWobble 0.8s infinite alternate ease-in-out;
+      transition: opacity 0.5s;
+    }
+
+    @keyframes flameWobble {
+      0% { transform: translateX(-50%) rotate(-4deg) scale(1); }
+      100% { transform: translateX(-50%) rotate(4deg) scale(1.1); }
+    }
+
+    .candle-instruction {
+      font-size: 13px;
+      color: #9c6080;
+      margin-top: 8px;
+    }
+
+    /* Rose Bouquet Screen */
+    .bouquet-icon {
+      font-size: 85px;
+      margin: 12px 0;
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+
+    .tag-container {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      width: 100%;
+      margin: 12px 0;
+    }
+
+    .tag-pill {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 13.5px;
+      color: #7a2b53;
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      border: 1px solid rgba(255, 182, 193, 0.4);
+    }
+
+    /* Letter Screen */
+    .letter-card {
+      background: #ffffff;
+      padding: 22px 18px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(220, 120, 160, 0.15);
+      border: 1px solid #ffe3ec;
+      text-align: left;
+      line-height: 1.65;
+      font-size: 13.5px;
+      color: #552a42;
+      width: 100%;
+      position: relative;
+    }
+
+    .letter-card h3 {
+      font-size: 17px;
+      color: #b52b65;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .stamp {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Audio Element (song.mp3) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Background Floating Hearts -->
+  <div class="heart-bg" style="left: 10%; animation-duration: 7s; font-size: 24px;">💖</div>
+  <div class="heart-bg" style="left: 30%; animation-duration: 9s; font-size: 18px;">🌸</div>
+  <div class="heart-bg" style="left: 65%; animation-duration: 6s; font-size: 22px;">✨</div>
+  <div class="heart-bg" style="left: 85%; animation-duration: 8s; font-size: 16px;">💗</div>
+
+  <div class="container">
+    <!-- Music Button -->
+    <div class="music-btn" id="musicToggleBtn" onclick="toggleMusic()" title="Play/Pause Music">🎵</div>
+
+    <!-- Screen 1: Welcome -->
+    <div class="screen active" id="screen1">
+      <div class="cute-illustration">🐼🎂🐻</div>
+      <div class="title-large">Happy Birthday,<br>Anjali ji! 🌸</div>
+      <div class="subtitle">Aapke liye ek pyara sa surprise wait kar raha hai...</div>
+      <button class="btn" onclick="startSurprise()">Aage Dekhiye ✨</button>
+    </div>
+
+    <!-- Screen 2: Photo Moment -->
+    <div class="screen" id="screen2">
+      <div class="title-large" style="font-size: 21px;">Some Sweet Moments 📸</div>
+      <div class="subtitle">The prettiest smile ever! 💖</div>
+      
+      <div class="polaroid-frame">
+        <img src="photo.jpg" alt="Anjali ji" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'">
+        <div class="polaroid-caption">Make a wish! 🎈✨</div>
+      </div>
+
+      <button class="btn" onclick="nextScreen(3)">Next Surprise ➔</button>
+    </div>
+
+    <!-- Screen 3: Balloon Pop Game -->
+    <div class="screen" id="screen3">
+      <div class="title-large" style="font-size: 21px;">Sabhi 4 Balloons Phodiye 🎈</div>
+      <div class="subtitle">Har balloon par tap kijiye!</div>
+      
+      <div class="balloon-area">
+        <div class="balloon balloon-b1" onclick="popBalloon(this, 'Aap ')">🎈</div>
+        <div class="balloon balloon-b2" onclick="popBalloon(this, 'bahut ')">🎈</div>
+        <div class="balloon balloon-b3" onclick="popBalloon(this, 'zyada ')">🎈</div>
+        <div class="balloon balloon-b4" onclick="popBalloon(this, 'special hain! ✨')">🎈</div>
+      </div>
+
+      <div class="revealed-text" id="revealedMessage"></div>
+      <button class="btn" id="balloonNextBtn" style="display: none;" onclick="nextScreen(4)">Aage Chalein ➔</button>
+    </div>
+
+    <!-- Screen 4: Blow Candle -->
+    <div class="screen" id="screen4">
+      <div class="title-large" style="font-size: 21px;">Blow the Candle 🕯️</div>
+      <div class="subtitle">Candle par tap karke ise bujhaiye</div>
+
+      <div class="cake-container" onclick="blowCandle()">
+        <div class="flame" id="candleFlame">🔥</div>
+        <div class="cake-icon">🎂</div>
+      </div>
+
+      <div class="candle-instruction" id="candleStatus">Candle bujhane ke liye tap kijiye ✨</div>
+      <button class="btn" id="cakeNextBtn" style="display: none;" onclick="nextScreen(5)">Aapka Gift Dekhiye 🎁</button>
+    </div>
+
+    <!-- Screen 5: Rose Bouquet -->
+    <div class="screen" id="screen5">
+      <div class="title-large" style="font-size: 21px;">Aapka Rose Bouquet 🌹</div>
+      <div class="bouquet-icon">💐</div>
+      
+      <div class="tag-container">
+        <div class="tag-pill">✨ Aap hamari duniya ko khubsurat banati hain</div>
+        <div class="tag-pill">🌸 Aap hamesha aise hi muskurati rahiye</div>
+        <div class="tag-pill">💖 Aap jaisa koi dusra nahi hai</div>
+      </div>
+
+      <button class="btn" onclick="nextScreen(6)">A Message For You 💌</button>
+    </div>
+
+    <!-- Screen 6: Special Letter -->
+    <div class="screen" id="screen6">
+      <div class="letter-card">
+        <span class="stamp">💌</span>
+        <h3>A Message From Heart</h3>
+        <p>
+          <strong>Dear Anjali ji,</strong><br><br>
+          Aapki presence har ek moment ko bohot khubsurat aur special bana deti hai. Aap hamesha har kisi ke chehre par muskaan laati hain.<br><br>
+          Aapke is khaas janamdin par hum bas yahi dua karte hain ki aapki zindagi hamesha khushiyon, prem, safalta aur sukoon se bhari rahe.<br><br>
+          Aap jo bhi chahein, wo aapko mile.<br>
+          <strong>Janamdin bohot bohot mubarak ho! 🎉</strong>
+        </p>
+      </div>
+
+      <button class="btn" onclick="celebrateAgain()">Aur Confetti Udayein! 🎊</button>
+    </div>
+
+  </div>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicToggleBtn');
+    let isMusicPlaying = false;
+    let poppedCount = 0;
+    let fullMsg = "";
+
+    function playMusic() {
+      music.play().then(() => {
+        isMusicPlaying = true;
+        musicBtn.innerText = "🔊";
+      }).catch(() => {
+        // If autoplay blocked
+        isMusicPlaying = false;
+        musicBtn.innerText = "🔇";
+      });
+    }
+
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        music.pause();
+        isMusicPlaying = false;
+        musicBtn.innerText = "🔇";
+      } else {
+        music.play();
+        isMusicPlaying = true;
+        musicBtn.innerText = "🔊";
+      }
+    }
+
+    function startSurprise() {
+      playMusic();
+      nextScreen(2);
+    }
+
+    function nextScreen(screenNum) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const next = document.getElementById('screen' + screenNum);
+      if (next) {
+        next.classList.add('active');
+      }
+
+      if (screenNum === 6) {
+        triggerConfetti();
+      }
+    }
+
+    function popBalloon(element, word) {
+      element.classList.add('popped');
+      fullMsg += word;
+      document.getElementById('revealedMessage').innerText = fullMsg;
+      poppedCount++;
+
+      confetti({
+        particleCount: 20,
+        spread: 40,
+        origin: { y: 0.6 }
+      });
+
+      if (poppedCount === 4) {
+        setTimeout(() => {
+          document.getElementById('balloonNextBtn').style.display = 'inline-block';
+        }, 300);
+      }
+    }
+
+    function blowCandle() {
+      const flame = document.getElementById('candleFlame');
+      if (flame.style.display !== 'none') {
+        flame.style.display = 'none';
+        document.getElementById('candleStatus').innerHTML = "✨ Wish Puri Hui! Happy Birthday! ✨";
+        triggerConfetti();
+        document.getElementById('cakeNextBtn').style.display = 'inline-block';
+      }
+    }
+
+    function triggerConfetti() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function celebrateAgain() {
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.5 }
+      });
+    }
+  </script>
+</body>
+</html>
+H
